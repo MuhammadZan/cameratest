@@ -7,6 +7,12 @@ const DualCameraFeed = () => {
   useEffect(() => {
     const startDualCamera = async () => {
       try {
+        const backCameraStream = await navigator.mediaDevices.getUserMedia({
+            video: { facingMode: { exact: 'environment' } }
+          });
+          if (backCameraRef.current) {
+            backCameraRef.current.srcObject = backCameraStream;
+          }
         // Access front camera
         const frontCameraStream = await navigator.mediaDevices.getUserMedia({
           video: { facingMode: 'user' }
@@ -16,12 +22,7 @@ const DualCameraFeed = () => {
         }
 
         // Access back camera
-        const backCameraStream = await navigator.mediaDevices.getUserMedia({
-          video: { facingMode: { exact: 'environment' } }
-        });
-        if (backCameraRef.current) {
-          backCameraRef.current.srcObject = backCameraStream;
-        }
+        
 
       } catch (error) {
         console.error('Error accessing cameras: ', error);
